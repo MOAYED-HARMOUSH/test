@@ -17,14 +17,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return "request->user()";
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 // Student Routes
+Route::post('/login', [StudentAuthController::class, 'login']);
 
 Route::prefix('student')->group(function () {
-    Route::post('/login', [StudentAuthController::class, 'login']);
-    Route::middleware('auth:student')->group(function () {
+    Route::middleware('auth:api')->group(function () {
         Route::post('/logout', [StudentAuthController::class, 'logout']);
         Route::get('/dashboard', [StudentAuthController::class, 'dashboard']);
     });
@@ -33,7 +33,7 @@ Route::prefix('student')->group(function () {
 // Admin Routes
 Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminAuthController::class, 'login']);
-    Route::middleware('auth:admins')->group(function () {
+    Route::middleware('auth:admin-api')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout']);
      });
 });
@@ -41,7 +41,7 @@ Route::prefix('admin')->group(function () {
 // Super Admin Routes
 Route::prefix('super-admin')->group(function () {
     Route::post('/login', [SuperAdminAuthController::class, 'login']);
-    Route::middleware('auth:superAdmins')->group(function () {
+    Route::middleware('auth:super-admin-api')->group(function () {
         Route::post('/logout', [SuperAdminAuthController::class, 'logout']);
      });
 });
